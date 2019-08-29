@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
   // handle to the Character Controller component on the Player object
   private CharacterController _controller;
+
+  private UIManager _uiManager;
   [SerializeField]
   private float _speed = 5.0f;
   [SerializeField]
@@ -15,11 +17,18 @@ public class Player : MonoBehaviour
   // Used to store the current y value of velocity
   private float _yVelocity;
   private bool _canDoubleJump = false;
+  [SerializeField]
+  private int _coins = 0;
   // Start is called before the first frame update
   void Start()
   {
     _controller = GetComponent<CharacterController>();
+    _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
+    if (_uiManager == null)
+    {
+      Debug.Log("UI Manager is NULL");
+    }
   }
 
   // Update is called once per frame
@@ -62,5 +71,11 @@ public class Player : MonoBehaviour
     // We multiply velocity by Time.deltaTime so we don't fly off the screen when we move
     _controller.Move(velocity * Time.deltaTime);
 
+  }
+
+  public void AddCoins()
+  {
+    _coins++;
+    _uiManager.UpdateCoinDisplay(_coins);
   }
 }
