@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class Player : MonoBehaviour
 {
@@ -19,6 +21,8 @@ public class Player : MonoBehaviour
   private bool _canDoubleJump = false;
   [SerializeField]
   private int _coins = 0;
+  [SerializeField]
+  private int _lives = 3;
   // Start is called before the first frame update
   void Start()
   {
@@ -29,6 +33,8 @@ public class Player : MonoBehaviour
     {
       Debug.Log("UI Manager is NULL");
     }
+
+    _uiManager.UpdateLivesDisplay(_lives);
   }
 
   // Update is called once per frame
@@ -70,6 +76,19 @@ public class Player : MonoBehaviour
     velocity.y = _yVelocity;
     // We multiply velocity by Time.deltaTime so we don't fly off the screen when we move
     _controller.Move(velocity * Time.deltaTime);
+
+  }
+
+  public void Damage()
+  {
+    _lives--;
+    _uiManager.UpdateLivesDisplay(_lives);
+
+    // If out of lives, restart the environment (which we need SceneManagement for)
+    if (_lives < 1)
+    {
+      SceneManager.LoadScene(0);
+    }
 
   }
 
